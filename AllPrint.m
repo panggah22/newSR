@@ -1,8 +1,8 @@
 Timestep = 1:steps;
-xnode = x(inp.Sn,:); 
-xload = x(inp.Xl,:);
-xgen = x(inp.Xg,:);
-xbranch = x(inp.Xbr,:);
+xnode = round(x(inp.Sn,:)); 
+xload = round(x(inp.Xl,:));
+xgen = round(x(inp.Xg,:));
+xbranch = round(x(inp.Xbr,:));
 
 ts_node = cell(steps,2);
 ts_load = cell(steps,2);
