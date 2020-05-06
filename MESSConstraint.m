@@ -29,10 +29,7 @@ equ(71).Aeq = initials(steps,Aeq71);
 equ(71).beq = beq71;
 
 %% Constraint 72 >> SKIPPED FOR LATER
-abc = rout(data.c);
-Xm72 = cell2mat(abc(:,1));
-Aeq72 = zeros(size(Xm72,1),len.total);
-Aeq72(:,inp.Xm) = Xm72;
+Pm
 
 %% Constraint 73 .. 5
 Cm73 = eye(len.Cm);
@@ -287,7 +284,7 @@ ineq(86).b = concB(steps,b86);
 
 %% Constraint 87 .. 20
 Pmessc87 = eye(len.Pmessc);
-acp87 = ones(1,len.acp);
+acp87 = -ones(1,len.acp);
 
 Aeq87 = zeros(len.Pmessc,len.total);
 Aeq87(:,inp.Pmessc) = Pmessc87;
@@ -300,7 +297,7 @@ equ(87).beq = concB(steps,beq87);
 
 %% Constraint 88 .. 21
 Pmessd88 = eye(len.Pmessd);
-adp88 = ones(1,len.adp);
+adp88 = -ones(1,len.adp);
 
 Aeq88 = zeros(len.Pmessd,len.total);
 Aeq88(:,inp.Pmessd) = Pmessd88;
@@ -313,7 +310,7 @@ equ(88).beq = concB(steps,beq88);
 
 %% Constraint 89 .. 22
 Qmessc89 = eye(len.Qmessc);
-acq89 = ones(1,len.acq);
+acq89 = -ones(1,len.acq);
 
 Aeq89 = zeros(len.Qmessc,len.total);
 Aeq89(:,inp.Qmessc) = Qmessc89;
@@ -326,7 +323,7 @@ equ(89).beq = concB(steps,beq89);
 
 %% Constraint 90 .. 23
 Qmessd90 = eye(len.Qmessd);
-adq90 = ones(1,len.adq);
+adq90 = -ones(1,len.adq);
 
 Aeq90 = zeros(len.Qmessd,len.total);
 Aeq90(:,inp.Qmessd) = Qmessd90;
@@ -348,7 +345,12 @@ b91 = ones(data.num_ess,1);
 ineq(91).A = concA(steps,A91);
 ineq(91).b = concB(steps,b91);
 
-
+%% Constraint 92 .. 3
+% for ii = 1:data.num_mess
+%     for jj = 1:steps
+%         
+%     end
+% end
 %% Check if there is input Xm
 % Xbb = [0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]';
 % Xm100 = eye(len.Xm);

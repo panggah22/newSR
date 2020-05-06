@@ -1,6 +1,6 @@
 %% MILP Service Restoration BoChen
 tic; 
-close all;
+% close all;
 clear;
 setVmax = 1.05; % set maximum voltage
 setVmin = 0.95; % set minimum voltage
@@ -108,7 +108,7 @@ equ(61).beq = concB(steps,beq61);
 %% Back to normal constraints *SmileyFace
 %% Constraint 1
 % Searching for bus connection
-buscon1 = cell(data.num_bus,6);
+buscon1 = cell(data.num_bus,7);
 for i = 1:data.num_bus
     buscon1{i,1} = data.bus(i,1);
     buscon1{i,2} = data.load(data.load(:,2)==i,1);
@@ -116,6 +116,7 @@ for i = 1:data.num_bus
     buscon1{i,4} = data.branch(data.branch(:,2)==i,1);
     buscon1{i,5} = data.gen(data.gen(:,2)==i,1);
     buscon1{i,6} = data.ess(data.ess(:,2)==i,1);
+    buscon1{i,7} = data.c_coun(1,data.c == i);
 end
 
 Pl1 = zeros(data.num_bus,data.num_load);
@@ -123,6 +124,9 @@ Pg1 = zeros(data.num_bus,data.num_gen);
 Pbr1 = zeros(data.num_bus,data.num_branch);
 Pessc1 = zeros(data.num_bus,data.num_ess);
 Pessd1 = Pessc1;
+Pmessc1 = zeros(data.num_bus,len.Pmessc);
+Pmessd1 = zeros(data.num_bus,len.Pmessd);
+
 
 % Input variable constant (-1 and 1) according to the signs of constraint
 for i = 1:data.num_bus
@@ -132,16 +136,24 @@ for i = 1:data.num_bus
     Pg1(buscon1{i,1},buscon1{i,5}) = -1; % P_g,t
     Pessc1(buscon1{i,1},buscon1{i,6}) = 1; % P_essc,t
     Pessd1(buscon1{i,1},buscon1{i,6}) = -1; % P_essd,t
+    Pmessc1(buscon1{i,1},buscon1{i,7}) = 1; % P_messc,t
+    Pmessd1(buscon1{i,1},buscon1{i,7}) = -1; % P_messd,t
 end
 Aeq1 = zeros(len.Sn,len.total);
-Aeq1(:,[inp.Pl inp.Pbr inp.Pg inp.Pessc inp.Pessd]) = [Pl1 Pbr1 Pg1 Pessc1 Pessd1];
+Aeq1(:,[inp.Pl inp.Pbr inp.Pg inp.Pessc inp.Pessd inp.Pmessc inp.Pmessd]) = [Pl1, ...
+    Pbr1 Pg1 Pessc1 Pessd1 Pmessc1 Pmessd1];
+% Aeq1(:,[inp.Pl inp.Pbr inp.Pg inp.Pessc inp.Pessd]) = [Pl1, ...
+%     Pbr1 Pg1 Pessc1 Pessd1];
 beq1 = zeros(len.Sn,1);
 equ(1).Aeq = concA(steps,Aeq1);
 equ(1).beq = concB(steps,beq1);
 
 %% Constraint 2
 Aeq2 = zeros(len.Sn,len.total);
-Aeq2(:,[inp.Ql inp.Qbr inp.Qg inp.Qessc inp.Qessd]) = [Pl1 Pbr1 Pg1 Pessc1 Pessd1]; % Same construction
+Aeq2(:,[inp.Ql inp.Qbr inp.Qg inp.Qessc inp.Qessd inp.Qmessc inp.Qmessd]) = [Pl1, ...
+    Pbr1 Pg1 Pessc1 Pessd1 Pmessc1 Pmessd1]; % Same construction
+% Aeq2(:,[inp.Ql inp.Qbr inp.Qg inp.Qessc inp.Qessd]) = [Pl1, ...
+%     Pbr1 Pg1 Pessc1 Pessd1];
 beq2 = zeros(len.Sn,1);
 equ(2).Aeq = concA(steps,Aeq2);
 equ(2).beq = concB(steps,beq2);
@@ -950,10 +962,9 @@ b49 = zeros(size(A49,1),1);
 
 
 
-
 %% Running the MILP
 MESSConstraint;
 RunMILP;
 toc;
 AllPrint;
-AllPlot;
+% AllPlot;

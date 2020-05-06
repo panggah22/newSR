@@ -39,7 +39,7 @@ data.branch = [
     632     633     500     1000        2
     633     634     200     500         2
     632     645     500     1000        2
-    645     646     300     800         2
+    645     646     300     800         0
     632     671     2000    1500        2
     671     692     10      800         0
     692     675     500     800         2
@@ -91,7 +91,7 @@ data.gen = [(1:data.num_gen)' n_gen data.gen];
 %% ESS data
 data.ess = [
 %   Node    Rating  Socini  Socmin  Socmax  C_eff   D_eff   PCmin   PCmax   QCmin   QCmax   PDmin   PDmax   QDmin   QDmax   PRC     PRD     QRC     QRD
-    632     200     30      10      100     0.9     0.9     0       5       0       2       0       5       0       2       250     250     250     250
+    632     200     10      10      100     0.9     0.9     0       5       0       2       0       5       0       2       250     250     250     250
     ];
 
 % Converting power to Per Unit Value
@@ -122,6 +122,7 @@ for i = 1:data.num_mess
 end
 data.mess = [(1:data.num_mess) n_mess data.mess];
 data.c = [10 4 13];
+data.c_coun = ones(length(data.c));
 data.cand = [
     10 4 3
     10 13 2

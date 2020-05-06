@@ -48,7 +48,7 @@ lower(inp.Emess) = data.mess(:,6).*data.mess(:,4);
 
 % Run MILP
 charint(1,1:len.total) = 'C';
-charint(1,inp.Sn(1):inp.Xessd(end)) = 'I';
+charint(1,inp.disc) = 'I';
 decisionvar = zeros(len.total,1);
 decisionvar(inp.Pl) = -data.load(:,6)*intmin*data.MVAbase*1000;
 conchar = cell(1,steps);
