@@ -4,10 +4,10 @@ close all;
 clear;
 setVmax = 1.05; % set maximum voltage
 setVmin = 0.95; % set minimum voltage
-steps = 10; % maximum time step
+steps = 20; % maximum time step
 intmin = 1; % in minute
 inthour = intmin/60; % in hour
-bigM = 20000;
+bigM = 1e6;
 
 %% Retrieve data
 data = data13bochenrev;
@@ -948,7 +948,11 @@ A49_bef = A49_bef(data.statload == 2,:); % Only use the switchable load
 b49 = zeros(size(A49,1),1);
 [ineq(49).A,ineq(49).b] = time_relate(steps,A49_bef,A49,b49);
 
+
+
+
 %% Running the MILP
+MESSConstraint;
 RunMILP;
 toc;
 AllPrint;
