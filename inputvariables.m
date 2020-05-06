@@ -42,6 +42,6 @@ inp.Cm = inp.Xm(end) + (1:len.Cm);
 inp.Dm = inp.Cm(end) + (1:len.Dm);
 
 inp.cont = 1:inp.Emess(end); % Range of continuous var
-inp.disc = inp.Sn(1):inp.Xessd(end); % Range of discrete var
+inp.disc = inp.Sn(1):inp.Dm(end); % Range of discrete var
 
 end
