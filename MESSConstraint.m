@@ -1,19 +1,27 @@
 %% Additional constraints for MESS
 %% Constraint 70
-% Xm70 = eye(len.Xm);
-% Sn70 = zeros(len.Xm,len.Sn);
-% for ii = 1:len.Xm
-%     Sn70(ii,data.c(ii)) = -1;
+Sn70 = zeros(len.Sn);
+Xm70 = zeros(len.Sn,len.Xm);
+% Xg70 = zeros(len.Sn,len.Xg);
+
+for ii = 1:len.Xm
+    Sn70(data.c(ii),data.c(ii)) = -1;
+    Xm70(data.c(ii),ii) = 1;
+end
+% for ii = 1:len.Xg
+%     Sn70(data.gen(ii,2),data.gen(ii,2)) = 1;
+%     Xg70(data.gen(ii,2),ii) = -1;
 % end
-% 
-% Aeq70 = zeros(len.Xm,len.total);
-% Aeq70(:,inp.Xm) = Xm70;
-% Aeq70(:,inp.Sn) = Sn70;
-% 
-% beq70 = zeros(size(Aeq70,1),1);
-% 
-% equ(70).Aeq = concA(steps,Aeq70);
-% equ(70).beq = concB(steps,beq70);
+    
+A70 = zeros(len.Sn,len.total);
+A70(:,inp.Xm) = Xm70;
+A70(:,inp.Sn) = Sn70;
+A70 = A70(any(A70,2),:);
+
+b70 = zeros(size(A70,1),1);
+
+ineq(70).A = concA(steps,A70);
+ineq(70).b = concB(steps,b70);
 
 %% Constraint 71 >> set Xm(1) = 1
 Xm71 = zeros(1,len.Xm);
@@ -344,6 +352,7 @@ b91 = ones(data.num_ess,1);
 
 ineq(91).A = concA(steps,A91);
 ineq(91).b = concB(steps,b91);
+
 
 %% Check if there is input Xm
 % Xbb = [0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]';
