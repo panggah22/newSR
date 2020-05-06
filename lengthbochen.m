@@ -6,19 +6,19 @@ len.Pessc = data.num_ess; len.Pessd = len.Pessc;
 len.Ql = len.Pl; len.Qbr = len.Pbr; len.Qg = len.Pg;
 len.Qessc = len.Pessc; len.Qessd = len.Pessd; len.U = data.num_bus;
 len.Eess = data.num_ess;
-len.Pmc = data.num_mess*data.num_cand; len.Pmd = len.Pmc;
+len.Pmc = data.num_mess; len.Pmd = len.Pmc;
 len.Qmc = len.Pmc; len.Qmd = len.Pmc;
 len.Pmessc = len.Pmc; len.Pmessd = len.Pmc;
 len.Qmessc = len.Pmc; len.Qmessd = len.Pmc;
-len.adp = len.Pmc; len.acp = len.Pmc;
-len.adq = len.Pmc; len.acq = len.Pmc;
+len.adp = data.num_mess*data.num_cand; len.acp = len.adp;
+len.adq = len.adp; len.acq = len.adp;
 len.Emess = len.Pmc;
 
 % Discrete and binary variables
 len.Sn = data.num_bus; len.Xl = len.Pl; len.Xbr = data.num_branch;
 len.Xg = data.num_gen; len.Xessc = data.num_ess; len.Xessd = len.Xessc;
 len.Xm = data.num_mess*data.num_cand;
-len.Cm = len.Xm; len.Dm = len.Xm;
+len.Cm = len.Pmc; len.Dm = len.Pmc;
 
 % len.total = len.Pl + len.Pbr + len.Pg + len.Pessc + len.Pessd ...
 %     + len.Ql + len.Qbr + len.Qg + len.Qessc + len.Qessd + len.U + len.Eess...
