@@ -105,6 +105,35 @@ for i = 1:data.num_ess
 end
 data.ess = [(1:data.num_ess) n_ess data.ess];
 
+%% MESS data
+data.mess = [
+%   Node    Rating  Socini  Socmin  Socmax  C_eff   D_eff   PCmin   PCmax   QCmin   QCmax   PDmin   PDmax   QDmin   QDmax   PRC     PRD     QRC     QRD
+    650     200     100     10      100     0.9     0.9     0       5       0       2       0       5       0       2       250     250     250     250
+    ];
+
+% Converting power to Per Unit Value
+data.mess(:,[2 (16:19)]) = data.mess(:,[2 (16:19)])./(data.MVAbase*1000);
+data.mess(:,8:15) = data.mess(:,8:15)./data.MVAbase;
+data.mess(:,3:5) = data.mess(:,3:5)./100; % Change into percentage
+[data.num_mess,~] = size(data.mess);
+n_mess = zeros(data.num_mess,1);
+for i = 1:data.num_mess
+    n_mess(i,1) = data.bus((data.bus(:,2) == data.mess(i,1)),1);
+end
+data.mess = [(1:data.num_mess) n_mess data.mess];
+data.c = [10 4 13];
+data.cand = [
+    10 4 3
+    10 13 2
+    4 13 1];
+data.candidate = zeros(size(data.cand,1),1);
+
+for ii = 1:size(data.cand,1)
+    data.candidate(find(data.c==data.cand(ii,1)),find(data.c==data.cand(ii,2))) = data.cand(ii,3);
+    data.candidate(find(data.c==data.cand(ii,2)),find(data.c==data.cand(ii,1))) = data.cand(ii,3);
+end
+data.num_cand = length(data.candidate);
+
 %% Other data
 data.gamma = 0.05;
 data.statgen = data.gen(:,end);
