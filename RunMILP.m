@@ -21,13 +21,14 @@ all_b = cell2mat(Cbineq);
 
 % Check dimension
 fprintf("Dimension of All_Aeq = %d x %d\n",size(all_Aeq,1),size(all_Aeq,2));
-fprintf("Dimension of All_Aeq = %d x %d\n",size(all_beq,1),size(all_beq,2));
+fprintf("Dimension of All_beq = %d x %d\n",size(all_beq,1),size(all_beq,2));
 fprintf("Dimension of All_A = %d x %d\n",size(all_A,1),size(all_A,2));
 fprintf("Dimension of All_b = %d x %d\n\n",size(all_b,1),size(all_b,2));
 
 % Provide boundary
 upper = Inf(len.total,1);
 upper(inp.disc) = 1;
+upper(inp.Emess) = data.mess(:,7).*data.mess(:,4);
 % upper(inp.Pl) = data.load(:,4);
 % upper(inp.Ql) = data.load(:,5);
 % upper(inp.U) = 1.05^2;
@@ -35,13 +36,16 @@ upper(inp.disc) = 1;
 
 lower = -Inf(len.total,1);
 lower(inp.disc) = 0;
-% lower(inp.Pl) = data.load(:,4);
-% lower(inp.Ql) = data.load(:,5);
-% lower(inp.Pl) = 0;
-% lower(inp.Ql) = 0;
-% lower(inp.U) = 0.95^2;
-% lower(inp.Eess) = data.ess(:,3) .* data.ess(:,5);
-% bounds;
+lower(inp.Pmc) = 0;
+lower(inp.Pmd) = 0;
+lower(inp.Qmc) = 0;
+lower(inp.Qmd) = 0;
+lower(inp.adp) = 0;
+lower(inp.acp) = 0;
+lower(inp.adq) = 0;
+lower(inp.acq) = 0;
+lower(inp.Emess) = data.mess(:,6).*data.mess(:,4);
+
 % Run MILP
 charint(1,1:len.total) = 'C';
 charint(1,inp.Sn(1):inp.Xessd(end)) = 'I';
