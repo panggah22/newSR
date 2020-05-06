@@ -2,17 +2,12 @@
 %% Constraint 70
 Sn70 = zeros(len.Sn);
 Xm70 = zeros(len.Sn,len.Xm);
-% Xg70 = zeros(len.Sn,len.Xg);
 
 for ii = 1:len.Xm
     Sn70(data.c(ii),data.c(ii)) = -1;
     Xm70(data.c(ii),ii) = 1;
 end
-% for ii = 1:len.Xg
-%     Sn70(data.gen(ii,2),data.gen(ii,2)) = 1;
-%     Xg70(data.gen(ii,2),ii) = -1;
-% end
-    
+
 A70 = zeros(len.Sn,len.total);
 A70(:,inp.Xm) = Xm70;
 A70(:,inp.Sn) = Sn70;
