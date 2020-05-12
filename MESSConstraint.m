@@ -29,12 +29,11 @@ equ(71).Aeq = initials(steps,Aeq71);
 equ(71).beq = beq71;
 
 %% Constraint 72 >> SKIPPED FOR LATER
-Pm
 
 %% Constraint 73 .. 5
 Cm73 = eye(len.Cm);
 Dm73 = eye(len.Dm);
-Xm73 = -ones(1,len.Xm);
+Xm73 = -ones(len.Cm,len.Xm);
 
 A73 = zeros(len.Cm,len.total);
 A73(:,inp.Cm) = Cm73;
@@ -346,11 +345,59 @@ ineq(91).A = concA(steps,A91);
 ineq(91).b = concB(steps,b91);
 
 %% Constraint 92 .. 3
-% for ii = 1:data.num_mess
-%     for jj = 1:steps
-%         
-%     end
-% end
+
+aka = rout(data.c);
+abbb = cell(length(aka)*steps,steps);
+bbb92 = cell(size(abbb,1),1);
+for nn = 1:length(aka)
+    for tt = 1:steps
+        for ii = tt:min(tt+3,steps)
+            mot = aka{nn};
+            if ii == tt
+                mot(:,nn) = min(3,steps-tt).*ones(size(mot,1),1);
+            end
+            abbb{(nn-1)*steps+tt,ii} = mot;
+            
+        end
+        bbb92{(nn-1)*steps+tt,1} = min(3,steps-tt).*ones(size(mot,1),1);
+    end
+end
+
+Aaa92 = cell(size(abbb));
+
+for ii = 1:size(abbb,1)
+    for jj = 1:size(abbb,2)
+        A92 = zeros(size(aka{1},1),len.total);
+        if ~isempty(abbb{ii,jj})
+            A92(:,inp.Xm) = abbb{ii,jj};
+        end
+        Aaa92{ii,jj} = A92;
+    end
+end
+
+ineq(92).A = cell2mat(Aaa92(1:15,:));
+ineq(92).b = cell2mat(bbb92(1:15));
+
+
+%% Initial MESS SOC
+Emess93 = eye(len.Emess);
+Aeq93 = zeros(len.Emess,len.total);
+Aeq93(:,inp.Emess) = Emess93;
+beq93 = data.mess(:,5).*data.mess(:,4);
+
+equ(93).Aeq = initials(steps,Aeq93);
+equ(93).beq = beq93;
+
+%% Initial Xm
+Xm94 = zeros(len.Cm,len.Xm);
+Xm94(:,1) = ones(len.Cm,1);
+Aeq94 = zeros(len.Cm,len.total);
+Aeq94(:,inp.Xm) = Xm94;
+beq94 = ones(len.Cm,1);
+
+equ(94).Aeq = initials(steps,Aeq94);
+equ(94).beq = beq94;
+
 %% Check if there is input Xm
 % Xbb = [0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]';
 % Xm100 = eye(len.Xm);

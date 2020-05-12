@@ -2,43 +2,46 @@
 %% ESS
 figure
 ESSplot = x(inp.Eess,:)./data.ess(:,4)'*100;
-plot(ESSplot);
+MESSplot = x(inp.Emess,:)./data.mess(:,4)'*100;
+plot(ESSplot); hold on
+plot(MESSplot);
 ylim([9 40])
 
 %% Active power generated
 esscdp = [x(inp.Pessc,:); x(inp.Pessd,:)]';
-Pesscd = zeros(size(esscdp,1),1);
-for i = 1:size(esscdp,1)
-    if esscdp(i,1) == 0
-        Pesscd(i) = esscdp(i,2);
-    else
-        if esscdp(i,2) == 0
-            Pesscd(i) = -esscdp(i,1);
-        else 
-            Pesscd(i) = 0;
-        end
-    end
-end
+Pesscd = Psoc(esscdp);
+
+messcdp = [x(inp.Pmessc,:); x(inp.Pmessd,:)]';
+Pmesscd = Psoc(messcdp);
+
 figure
-P_all = [Pesscd x(inp.Pg,:)']*data.MVAbase*1000;
+P_all = [Pesscd Pmesscd x(inp.Pg,:)']*data.MVAbase*1000;
 
 bar(P_all,'stacked');
 
-%% Rective power generated
+%% Reactive power generated
 esscdq = [x(inp.Qessc,:); x(inp.Qessd,:)]';
-Qesscd = zeros(size(esscdq,1),1);
-for i = 1:size(esscdq,1)
-    if esscdq(i,1) == 0
-        Qesscd(i) = esscdq(i,2);
-    else
-        if esscdp(i,2) == 0
-            Qesscd(i) = -esscdq(i,1);
-        else 
-            Qesscd(i) = 0;
-        end
-    end
-end
+Qesscd = Psoc(esscdq);
+
+messcdq = [x(inp.Qmessc,:); x(inp.Qmessd,:)]';
+Qmesscd = Psoc(messcdq);
+
+
 figure
-Q_all = [Qesscd x(inp.Qg,:)']*data.MVAbase*1000;
+Q_all = [Qesscd Qmesscd x(inp.Qg,:)']*data.MVAbase*1000;
 
 bar(Q_all,'stacked');
+
+%% Function
+function abc = Psoc(a)
+
+abc = zeros(size(a,1),1);
+for i = 1:size(a,1)
+    [~, ind] = max(a(i,:));
+    if ind == 1
+        abc(i) = -max(a(i,:));
+    else
+        abc(i) = max(a(i,:));
+    end
+end
+end
