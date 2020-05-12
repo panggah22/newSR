@@ -1,10 +1,10 @@
 %% MILP Service Restoration BoChen
 tic; 
-% close all;
+close all;
 clear;
 setVmax = 1.05; % set maximum voltage
 setVmin = 0.95; % set minimum voltage
-steps = 20; % maximum time step
+steps = 10; % maximum time step
 intmin = 1; % in minute
 inthour = intmin/60; % in hour
 bigM = 1e6;
@@ -967,4 +967,4 @@ MESSConstraint;
 RunMILP;
 toc;
 AllPrint;
-% AllPlot;
+AllPlot;
